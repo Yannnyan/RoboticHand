@@ -12,11 +12,36 @@ namespace HandTracking.Parser
     
     public class CSVParser
     {
-        string PATH_TO_CSV1;
-        string PATH_TO_CSV2;
-        int SIZE_VECTORS = 18; // amount of joints we extract from the csv
-        int AMOUNT_FINGERS = 5;
-        
+        /**
+         * describes the order in which the List<List<Vector3>> is ordered after 
+         * getting it from readCSV()
+         * ThumbFinger the position of the thumb finger
+            IndexFinger, the position of the index finger
+            MiddleFinger, the position of the middle finger
+            RingFinger, the position of the ring finger
+            PinkyFinger, the position of the pinky finger
+            WristRootPos, the position of the wrist root position
+            WristRootRot the position of the wrist root rotation
+         */
+        public enum ParsingOrder
+        {
+            ThumbFinger,
+            IndexFinger,
+            MiddleFinger,
+            RingFinger,
+            PinkyFinger,
+            WristRootPos,
+            WristRootRot
+        }
+       
+        int START_THUMB = 0, END_THUMB = 3, START_INDEX = 4, END_INDEX = 6,
+            START_MIDDLE = 7, END_MIDDLE = 9, START_RING = 10, END_RING = 12,
+            START_PINKY = 13, END_PINKY = 16, ROOT_POS = 17, ROOT_ROT;
+
+
+       
+
+
         /**
          * Parses the Row we got from the csv to a list of Vectors,
          * where each vector represents the coordinates of a joint in the hand.
@@ -46,6 +71,10 @@ namespace HandTracking.Parser
             }
             return vectors;
         }
+        /**
+         * parsing a single row to the finger lines, in the order defined
+         * in ParsingOrder
+         */
         private List<List<Vector3>> parseRowToFingerLines(string row)
         {
             List<Vector3> allVectors = parseRowToVectors(row);
@@ -55,6 +84,8 @@ namespace HandTracking.Parser
             fingerLines.Add(getMiddleLine(allVectors));
             fingerLines.Add(getRingLine(allVectors));
             fingerLines.Add(getPinkyLine(allVectors));
+            fingerLines.Add(getRootPos(allVectors));
+            fingerLines.Add(getRootRot(allVectors));
             return fingerLines;
         }
         /**
@@ -64,34 +95,50 @@ namespace HandTracking.Parser
         {
             List<Vector3> fingerLineVectors = new List<Vector3>();
             
-            for (int i = start; i < end; i++)
+            for (int i = start; i <= end; i++)
                 fingerLineVectors.Add(vectors[i]);
             return fingerLineVectors;
         }
         /**
         * gets a list of all the vectors, and extracts only the thumb line vectors
         */
-        private List<Vector3> getThumbLine(List<Vector3> vectors) => getFingerLine(vectors, 0, 3);
+        private List<Vector3> getThumbLine(List<Vector3> vectors) => getFingerLine(vectors, START_THUMB, END_THUMB);
 
         /**
         * gets a list of all the vectors, and extracts only the index line vectors
         */
-        private List<Vector3> getIndexLine(List<Vector3> vectors) => getFingerLine(vectors, 4, 6);
+        private List<Vector3> getIndexLine(List<Vector3> vectors) => getFingerLine(vectors, START_INDEX, END_INDEX);
 
         /**
         * gets a list of all the vectors, and extracts only the middle line vectors
         */
-        private List<Vector3> getMiddleLine(List<Vector3> vectors) => getFingerLine(vectors, 7, 9);
+        private List<Vector3> getMiddleLine(List<Vector3> vectors) => getFingerLine(vectors, START_MIDDLE, END_MIDDLE);
         /**
-        * gets a list of all the vectors, and extracts only the middle line vectors
+        * gets a list of all the vectors, and extracts only the ring line vectors
         */
-        private List<Vector3> getRingLine(List<Vector3> vectors) => getFingerLine(vectors, 10, 12);
+        private List<Vector3> getRingLine(List<Vector3> vectors) => getFingerLine(vectors, START_RING, END_RING);
         /**
-        * gets a list of all the vectors, and extracts only the middle line vectors
+        * gets a list of all the vectors, and extracts only the pinky line vectors
         */
-        private List<Vector3> getPinkyLine(List<Vector3> vectors) => getFingerLine(vectors, 13, 16);
+        private List<Vector3> getPinkyLine(List<Vector3> vectors) => getFingerLine(vectors, START_PINKY, END_PINKY);
+        /**
+         * using the function with a list of all vectors to extract the position of the wrist root of the hand
+         */
+        private List<Vector3> getRootPos(List<Vector3> vectors) => getFingerLine(vectors, ROOT_POS, ROOT_POS);
+        /**
+         * using the same function to get the rotation
+         */
+        private List<Vector3> getRootRot(List<Vector3> vectors) => getFingerLine(vectors, ROOT_ROT, ROOT_ROT);
 
-        private List<List<List<Vector3>>> readCSV(string csvPath)
+
+        /**
+         * The outer list is the list of rows of the csv
+         * the second list is the list of lines for the fingers and root,
+         * the order of the lines is described in the enum ParsingOrder, defined in this class
+         * the third inner list is the finger line itself, in order.
+         * The order of the return list is described in the
+         */
+        public List<List<List<Vector3>>> readCSV(string csvPath)
         {
             List<List<List<Vector3>>> allFingerLines = new List<List<List<Vector3>>>();
             if (File.Exists(csvPath))
