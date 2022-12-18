@@ -36,7 +36,7 @@ namespace HandTracking.Parser
        
         int START_THUMB = 0, END_THUMB = 3, START_INDEX = 4, END_INDEX = 6,
             START_MIDDLE = 7, END_MIDDLE = 9, START_RING = 10, END_RING = 12,
-            START_PINKY = 13, END_PINKY = 16, ROOT_POS = 17, ROOT_ROT;
+            START_PINKY = 13, END_PINKY = 16, ROOT_POS = 17, ROOT_ROT=18;
 
 
        
@@ -59,7 +59,10 @@ namespace HandTracking.Parser
                     current = new Vector3();
                 }
                 else if (i % 4 == 1)
+                {
+                    Debug.Log(values[i]);
                     x = float.Parse(values[i]);
+                }
                 else if (i % 4 == 2)
                     y = float.Parse(values[i]);
                 else
@@ -150,6 +153,7 @@ namespace HandTracking.Parser
                     if(isFirst)
                     {
                         isFirst = false;
+                        reader.ReadLine();
                         continue;
                     }
                     string line = reader.ReadLine();

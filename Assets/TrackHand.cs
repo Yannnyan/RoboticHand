@@ -116,7 +116,9 @@ namespace HandTracking.TrackHand
                     var line = string.Format("{0},{1},{2},{3},{4}", finger_name, "X", "Y", "Z", " ");
                     w.Write(line);
                 }
-                var line1 = string.Format("{0},{1},{2},{3},{4}", "root_hand", "RotateX", "RotateY", "RotateZ", " ");
+                var line1 = string.Format("{0},{1},{2},{3},{4}", "root_hand", "X", "Y", "Z", " ");
+                w.Write(line1);
+                line1 = string.Format("{0},{1},{2},{3},{4}", "root_hand", "RotateX", "RotateY", "RotateZ", " ");
                 w.Write(line1);
                 w.WriteLine();
             }
@@ -332,8 +334,11 @@ namespace HandTracking.TrackHand
                     var line = string.Format("{0},{1},{2},{3},{4}", finger_names[i], t.x, t.y, t.z, " ");
                     w.Write(line);
                 }
-                var t1 = handRootBoneObj.transform.rotation;
+                var t1 = handRootBoneObj.transform.position;
                 var line1 = string.Format("{0},{1},{2},{3},{4}", "root_hand", t1.x, t1.y, t1.z, " ");
+                w.Write(line1);
+                var r1 = handRootBoneObj.transform.rotation;
+                line1 = String.Format("{0},{1},{2},{3},{4}", "root_hand", r1.x, r1.y, r1.z, " ");
                 w.Write(line1);
                 w.WriteLine();
             }

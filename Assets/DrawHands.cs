@@ -18,11 +18,18 @@ namespace HandTracking.Draw
         int frame = 0;
         int indexLeft = 0;
         int indexRight = 0;
-
+        private List<GameObject> linesGenerated;
+        private Dictionary<CSVParser.ParsingOrder, Color> colorDict = new Dictionary<CSVParser.ParsingOrder, Color>
+        { {CSVParser.ParsingOrder.ThumbFinger, Color.blue },
+            {CSVParser.ParsingOrder.IndexFinger, Color.yellow },
+            {CSVParser.ParsingOrder.MiddleFinger, Color.red },
+            {CSVParser.ParsingOrder.RingFinger, Color.green },
+            {CSVParser.ParsingOrder.PinkyFinger, Color.magenta } };
         // awake is called once when the script is loaded
         // if we have a path to read, read it and then display the hands in the update per 60 frames.
         void Awake()
         {
+            linesGenerated = new List<GameObject>();
             CSVParser parser = new CSVParser();
             if(LEFT_CSV_PATH != null && LEFT_CSV_PATH != "")
                 leftFingerLines = parser.readCSV(LEFT_CSV_PATH);
@@ -38,8 +45,11 @@ namespace HandTracking.Draw
         void Update()
         {
             // each 60 frames display the hand
-            if (frame % 60 == 0)
+            if (frame % 300 == 0)
             {
+                destroyPreviousDrawing();
+                //var thumb_line = leftFingerLines[indexLeft][0];
+                //spawnLineGenerator(thumb_line);
                 // if we are in range to display the left hand
                 if (indexLeft < leftFingerLines.Count)
                 {
@@ -50,7 +60,8 @@ namespace HandTracking.Draw
                         leftLine.AddRange(leftFingerLines[indexLeft][(int)CSVParser.ParsingOrder.WristRootPos]);
                         // add the current finger line
                         leftLine.AddRange(leftFingerLines[indexLeft][(int)i]);
-                        spawnLineGenerator(leftLine);
+                        
+                        spawnLineGenerator(leftLine, colorDict[i]);
                     }
                     indexLeft++;
                 }
@@ -65,7 +76,7 @@ namespace HandTracking.Draw
                         rightLine.AddRange(rightFingerLines[indexRight][(int)(CSVParser.ParsingOrder.WristRootPos)]);
                         // add the current finger line
                         rightLine.AddRange(rightFingerLines[indexRight][(int)i]);
-                        spawnLineGenerator(rightLine);
+                        spawnLineGenerator(rightLine, colorDict[i]);
                     }
                     indexRight++;
                 }
@@ -74,17 +85,35 @@ namespace HandTracking.Draw
             frame++;
           
         }
-    
+        
+        private void destroyPreviousDrawing()
+        {
+            List<GameObject> linesTemp = linesGenerated.GetRange(0, linesGenerated.Count);
+            foreach(GameObject line in linesTemp)
+            {
+                linesGenerated.Remove(line);
+                Destroy(line);
+            }
+        }
        
-        private void spawnLineGenerator(List<Vector3> fingerLine)
+        private void spawnLineGenerator(List<Vector3> fingerLine, Color color)
         {
             GameObject newLineGenerator = Instantiate(lineGeneratorPrefab);
+            
             LineRenderer lineRenderer = newLineGenerator.GetComponent<LineRenderer>();
-
+            lineRenderer.positionCount = fingerLine.Count;
+            
             for(int i=0; i< fingerLine.Count; i++)
             {
                 lineRenderer.SetPosition(i, fingerLine[i]);
             }
+            GradientColorKey[] tempColorKeys = new GradientColorKey[fingerLine.Count];
+            for (int i = 0; i < tempColorKeys.Length; i++)
+                tempColorKeys[i] = new GradientColorKey(color, i);
+            Gradient tempGradient = new Gradient();
+            tempGradient.colorKeys = tempColorKeys;
+            lineRenderer.colorGradient = tempGradient;
+            linesGenerated.Add(newLineGenerator);
 
         }
     }

@@ -251,7 +251,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6dd79c55bb00b442b09786df56305f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lineGeneratorPrefab: {fileID: 0}
+  lineGeneratorPrefab: {fileID: 7839252923805419862}
+  LEFT_CSV_PATH: C:\\Users\Yan\\Desktop\\PositionBonesRight.csv
+  RIGHT_CSV_PATH: C:\\Users\\Yan\\Desktop\\PositionBonesLeft.csv
 --- !u!1 &1612537116
 GameObject:
   m_ObjectHideFlags: 0
@@ -401,5 +403,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: LineHolder
       objectReference: {fileID: 0}
+    - target: {fileID: 7119335599188297740, guid: 126f536e73b64a64094a4fe9fa26ca2d, type: 3}
+      propertyPath: m_Positions.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7119335599188297740, guid: 126f536e73b64a64094a4fe9fa26ca2d, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].time
+      value: 0.052014284
+      objectReference: {fileID: 0}
+    - target: {fileID: 7119335599188297740, guid: 126f536e73b64a64094a4fe9fa26ca2d, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
+      value: 0.007461548
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 126f536e73b64a64094a4fe9fa26ca2d, type: 3}
+--- !u!1 &7839252923805419862 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4712949135748833235, guid: 126f536e73b64a64094a4fe9fa26ca2d, type: 3}
+  m_PrefabInstance: {fileID: 7839252923805419861}
+  m_PrefabAsset: {fileID: 0}
