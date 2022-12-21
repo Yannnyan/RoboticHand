@@ -9,6 +9,7 @@ namespace HandTracking.TrackHand
 {
     public class TrackHandRight : MonoBehaviour
     {
+        #region serializeables
         [SerializeField]
         private HandToTrack handToTrack;
         //// index 0 and root
@@ -51,6 +52,9 @@ namespace HandTracking.TrackHand
         private GameObject ringFingerBone3Obj;
         [SerializeField]
         private GameObject pinkyFingerBone3Obj;
+        #endregion
+        // remote tracking device
+        public OVRInput.Controller controller;
         #region drawable
         protected LineRenderer line;
         #endregion
@@ -304,12 +308,25 @@ namespace HandTracking.TrackHand
                 .SingleOrDefault();
                 pinkyFingerBone3Obj = pinkyFingerBone3.Transform.gameObject;
             }
-            if (frame % 60 == 0)
-            {
-                writeToFile();
-            }
+            // writes every 60 frames
+            //if (frame % 60 == 0)
+            //{
+            //    writeToFile();
+            //}
+            // writes only when the A button is pressed
+
+            //if (OVRInput.Get(OVRInput.Button.One, controller))
+            //{
+            //    // write to right hand CSV
+            //    writeToFile();
+            //}
         }
 
+        public void onButtonPress()
+        {
+            writeToFile();
+            Debug.Log("Record Button was pressed");
+        }
         void writeToFile()
         {
             Debug.Log("writeLog");

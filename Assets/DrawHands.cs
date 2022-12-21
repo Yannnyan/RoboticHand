@@ -101,6 +101,7 @@ namespace HandTracking.Draw
             GameObject newLineGenerator = Instantiate(lineGeneratorPrefab);
             
             LineRenderer lineRenderer = newLineGenerator.GetComponent<LineRenderer>();
+            lineRenderer.material = new Material(Shader.Find("Legacy Shaders/Particles/Alpha Blended Premultiply"));
             lineRenderer.positionCount = fingerLine.Count;
             
             for(int i=0; i< fingerLine.Count; i++)
@@ -113,6 +114,7 @@ namespace HandTracking.Draw
             Gradient tempGradient = new Gradient();
             tempGradient.colorKeys = tempColorKeys;
             lineRenderer.colorGradient = tempGradient;
+            
             linesGenerated.Add(newLineGenerator);
 
         }

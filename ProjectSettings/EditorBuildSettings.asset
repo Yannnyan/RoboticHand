@@ -8,7 +8,7 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/DrawHands.unity
     guid: 2713e5a3c61601c4da201c5c584f2d27
   - enabled: 1

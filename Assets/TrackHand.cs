@@ -56,6 +56,8 @@ namespace HandTracking.TrackHand
         private GameObject ringFingerBone3Obj;   
         [SerializeField]
         private GameObject pinkyFingerBone3Obj;
+
+        public OVRInput.Controller controller;
         #region drawable
         protected LineRenderer line;
         #endregion
@@ -309,10 +311,15 @@ namespace HandTracking.TrackHand
                 .SingleOrDefault();
                 pinkyFingerBone3Obj = pinkyFingerBone3.Transform.gameObject;
             }
-            if (frame % 60 == 0)
-            {
-                writeToFile();
-            }
+            //if (frame % 60 == 0)
+            //{
+            //    writeToFile();
+            //}
+            //if (OVRInput.GetDown(OVRInput.Button.One, controller))
+            //{
+            //    // write to left hand CSV
+            //    writeToFile();
+            //}
         }
 
         void writeToFile()

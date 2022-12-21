@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1536
     height: 780.8
   m_ShowMode: 4
-  m_Title: Scene
+  m_Title: Inspector
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -144,7 +144,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 94
+  controlID: 51
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -169,7 +169,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 95
+  controlID: 52
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -270,8 +270,8 @@ MonoBehaviour:
     y: 0
     width: 403.19995
     height: 730.8
-  m_MinSize: {x: 276, y: 71}
-  m_MaxSize: {x: 4001, y: 4021}
+  m_MinSize: {x: 275, y: 50}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 17}
   m_Panes:
   - {fileID: 17}
@@ -612,13 +612,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.24688646, y: -0.0053868573, z: -0.0018686395, w: 0.9696495}
+    m_Target: {x: 0.22146586, y: -0.14667994, z: 0.030498259, w: 0.96422535}
     speed: 2
-    m_Value: {x: 0.2481911, y: -0.0053864154, z: -0.0018594171, w: 0.9686944}
+    m_Value: {x: 0.22133058, y: -0.14659034, z: 0.03047963, w: 0.9636364}
   m_Size:
-    m_Target: 0.27060756
+    m_Target: 1.8720833
     speed: 2
-    m_Value: 0.27060756
+    m_Value: 1.8720833
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -676,7 +676,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 7a1bfffffa2cffff4e2dffff522effff2837ffff82ceffff16d1ffffd4dfffff22e0ffff28e0ffff88e8ffffdce8ffff14eeffff2efbffff
+      m_ExpandedIDs: f28dfeff408efeff1e92feffa2a4fefff0a4feff36a9feff942cffffe82cffff9a2dffff783fffffcc3fffffc845ffffd245ffffac6dffff2cfbffffc2a400000ea900009ea90000a2a900002cd3000044d30000d4d30000d8d30000aadf00003ce200003cee000078ee000020ef00000af1000026f10000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -741,22 +741,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scenes
+    - Assets/Oculus/VR/Meshes/OculusTouchForRift/Animation
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Scenes
+  - Assets/Oculus/VR/Meshes/OculusTouchForRift/Animation
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\Yan\Object_creation
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 226d0000
-    m_LastClickedID: 27938
-    m_ExpandedIDs: 00000000dc6c000000ca9a3bffffff7f
+    scrollPos: {x: 0, y: 632.6}
+    m_SelectedIDs: b6ac0000
+    m_LastClickedID: 44214
+    m_ExpandedIDs: 00000000e66c0000266d00009e700000a2700000a8700000dc700000ba87000008c3000048c300004ac3000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -784,7 +784,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000dc6c0000
+    m_ExpandedIDs: 00000000e66c0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -812,7 +812,7 @@ MonoBehaviour:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 1
-    m_ExpandedInstanceIDs: c623000000000000
+    m_ExpandedInstanceIDs: c623000000000000b26f0000c0870000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -969,10 +969,10 @@ MonoBehaviour:
     m_VAllowExceedBaseRangeMin: 1
     m_VAllowExceedBaseRangeMax: 1
     m_ScaleWithWindow: 0
-    m_HSlider: 0
-    m_VSlider: 0
+    m_HSlider: 1
+    m_VSlider: 1
     m_IgnoreScrollWheelUntilClicked: 0
-    m_EnableMouseInput: 0
+    m_EnableMouseInput: 1
     m_EnableSliderZoomHorizontal: 0
     m_EnableSliderZoomVertical: 0
     m_UniformScale: 1
@@ -983,18 +983,18 @@ MonoBehaviour:
       y: 21
       width: 820.4
       height: 396.4
-    m_Scale: {x: 2.1743848, y: 2.1743848}
-    m_Translation: {x: 410.1998, y: 198.2001}
+    m_Scale: {x: 2.3118055, y: 2.3118055}
+    m_Translation: {x: 402.82526, y: 192.70279}
     m_MarginLeft: 0
     m_MarginRight: 0
     m_MarginTop: 0
     m_MarginBottom: 0
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
-      x: -188.65097
-      y: -91.15227
-      width: 377.30212
-      height: 182.30443
+      x: -174.24704
+      y: -83.35597
+      width: 354.87415
+      height: 171.46771
     m_MinimalGUI: 1
   m_defaultScale: 1
   m_LastWindowPixelSize: {x: 1025.5, y: 521.75}
