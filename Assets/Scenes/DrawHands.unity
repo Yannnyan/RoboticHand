@@ -238,20 +238,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Cup: {fileID: 1350184627596168561, guid: 009bb83e627ca344185dd0e8a8ef9f5d, type: 3}
   RotationCup: {x: 0, y: 0, z: 0, w: 0}
+  ScaleCup: {x: 0, y: 0, z: 0}
   Cone: {fileID: 650189132102069477, guid: 90c2ac8d1b27b244e8ad0cc56792b2a8, type: 3}
   RotationCone: {x: 0, y: 0, z: 0, w: 0}
+  ScaleCone: {x: 0, y: 0, z: 0}
   Cylinder: {fileID: 6596388961346911098, guid: c77e256601603fe47a03b3d9f1af505c, type: 3}
   RotationCylinder: {x: 0, y: 0, z: 0, w: 0}
+  ScaleCylinder: {x: 0, y: 0, z: 0}
   Cube: {fileID: 7868806522406197819, guid: d5ead07d7d3042c418bb12b778b7811c, type: 3}
   RotationCube: {x: 0, y: 0, z: 0, w: 0}
+  ScaleCube: {x: 0, y: 0, z: 0}
   Ball: {fileID: 7732897935501590857, guid: 768bc27ddec919d4f9a764154438d520, type: 3}
   RotationBall: {x: 0, y: 0, z: 0, w: 0}
+  ScaleBall: {x: 0, y: 0, z: 0}
   Coin: {fileID: 1650545798666906407, guid: 281f840335cce234b8629ab81470aad4, type: 3}
   RotationCoin: {x: 0, y: 0, z: 0, w: 0}
+  ScaleCoin: {x: 0, y: 0, z: 0}
   Arc: {fileID: 7339274109644764547, guid: 0e0915070a8e88d4b97de41295b460ac, type: 3}
   RotationArc: {x: 0, y: 0, z: 0, w: 0}
+  ScaleArc: {x: 0, y: 0, z: 0}
+  Pot: {fileID: 0}
+  RotationPot: {x: 0, y: 0, z: 0, w: 0}
+  ScalePot: {x: 0, y: 0, z: 0}
+  Lid: {fileID: 0}
+  RotationLid: {x: 0, y: 0, z: 0, w: 0}
+  ScaleLid: {x: 0, y: 0, z: 0}
   Position: {x: 0.089, y: 0.659, z: 0.59}
   Scale: {x: 0.05266825, y: 0.04649679, z: 0.03134177}
+  ScaleRange: 0.01
+  RotateDegreeRange: 30
 --- !u!4 &796937251
 Transform:
   m_ObjectHideFlags: 0
@@ -313,7 +328,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lineGeneratorPrefab: {fileID: 7839252923805419862}
   LEFT_CSV_PATH: C:\\Users\Yan\\Desktop\\PositionBonesRight.csv
-  RIGHT_CSV_PATH: C:\\Users\\Yan\\Desktop\\PositionBonesLeft.csv
+  RIGHT_CSV_PATH: C:\Users\Yan\Desktop\PositionBonesRight.csv
 --- !u!1 &1612537116
 GameObject:
   m_ObjectHideFlags: 0
