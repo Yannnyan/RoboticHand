@@ -112,20 +112,20 @@ namespace HandTracking.TrackHand
             if(!File.Exists(F_To_write)) // check if file already exists or no
                 using (var w = new StreamWriter(F_To_write, false)) // delete all the existing data and write the headers of the file
                 {
-                    var line = string.Format("{0}", "Output");
+                    var line = string.Format("{0},", "Output");
                     w.Write(line);
                     foreach (string finger_name in finger_names)
                     {
-                        line = string.Format("{0},{1},{2}", $"{finger_name}_X", $"{finger_name}_Y", $"{finger_name}_Z");
+                        line = string.Format("{0},{1},{2},", $"{finger_name}_X", $"{finger_name}_Y", $"{finger_name}_Z");
                         w.Write(line);
                     }
-                    var line1 = string.Format("{0},{1},{2}", "roothand_X", "roothand_Y", "roothand_Z");
+                    var line1 = string.Format("{0},{1},{2},", "roothand_X", "roothand_Y", "roothand_Z");
                     w.Write(line1);
-                    line1 = string.Format("{0},{1},{2}", "roothand_RotateX", "roothand_RotateY", "roothand_RotateZ");
+                    line1 = string.Format("{0},{1},{2},", "roothand_RotateX", "roothand_RotateY", "roothand_RotateZ");
                     w.Write(line1);
                     foreach (string finger_name in finger_names)
                     {
-                        line = string.Format("{0},{1},{2}", $"{finger_name}_RotateX", $"{finger_name}_RotateY", $"{finger_name}_RotateZ");
+                        line = string.Format("{0},{1},{2},", $"{finger_name}_RotateX", $"{finger_name}_RotateY", $"{finger_name}_RotateZ");
                         w.Write(line);
                     }
                     w.WriteLine();
@@ -320,10 +320,34 @@ namespace HandTracking.TrackHand
             
         }
 
+        public void MakeInvisible()
+        {
+            GameObject console = GameObject.Find("DebugArea");
+            console.GetComponent<Canvas>().enabled = !console.GetComponent<Canvas>().enabled;            
+            Debug.Log("[ObjectManager] Everything Made Invisible");
+        }
+        public void TakeScreenshot()
+        {
+            record_num++;
+            ScreenCapture.CaptureScreenshot($"Input{record_num}.png");
+            Debug.Log("[ObjectManager] Took Screenshot");
+            //Invoke("MakeInvisible", 0.4f);
+            MakeInvisible();
+            CancelInvoke(nameof(count_seconds));
+        }
         public void onButtonPress()
         {
             Debug.Log("[Right Hand] Record Button was pressed");
             writeToFile();
+            // wait 5 seconds
+            Invoke(nameof(MakeInvisible), 4f);
+            Invoke(nameof(TakeScreenshot), 5f);
+            InvokeRepeating(nameof(count_seconds), 0.0f, 1.0f);
+        }
+        void count_seconds()
+        {
+            // log second after second
+            Debug.Log("[Right Hand] Counting before Screenshot 5 seconds: ");
         }
         void writeToFile()
         {
@@ -335,25 +359,25 @@ namespace HandTracking.TrackHand
                                         pinkyFingerBone0Obj, pinkyFingerBone1Obj,pinkyFingerBone2Obj, pinkyFingerBone3Obj};
             using (var w = new StreamWriter(F_To_write, true))
             {
-                var line = string.Format("{0}", record_num);
+                var line = string.Format("{0},", record_num);
                 w.Write(line);
                 var root_transform = handRootBoneObj.transform.position;
                 for (int i = 0; i < fingers.Length; i++)
                 {
                     var t = fingers[i].transform.position;
-                    line = string.Format("{0},{1},{2}", t.x - root_transform.x,
+                    line = string.Format("{0},{1},{2},", t.x - root_transform.x,
                         t.y - root_transform.y, t.z - root_transform.z);
                     w.Write(line);
                 }
-                var line1 = string.Format("{0},{1},{2}", 0, 0, 0);
+                var line1 = string.Format("{0},{1},{2},", 0, 0, 0);
                 w.Write(line1);
                 var r1 = handRootBoneObj.transform.rotation;
-                line1 = String.Format("{0},{1},{2}", r1.x, r1.y, r1.z);
+                line1 = String.Format("{0},{1},{2},", r1.x, r1.y, r1.z);
                 w.Write(line1);
                 for (int i = 0; i < fingers.Length; i++)
                 {
                     var t = fingers[i].transform.rotation;
-                    line = string.Format("{0},{1},{2}", t.x,
+                    line = string.Format("{0},{1},{2},", t.x,
                         t.y, t.z);
                     w.Write(line);
                 }
