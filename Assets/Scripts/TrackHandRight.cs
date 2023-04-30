@@ -5,6 +5,7 @@ using System.IO;
 using System;
 using UnityEngine.Assertions;
 using HandTracking.Parser;
+using RoboticHand;
 
 namespace HandTracking.TrackHand
 {
@@ -15,7 +16,7 @@ namespace HandTracking.TrackHand
         private HandToTrack handToTrack;
         //// index 0 and root
         [SerializeField]
-        private GameObject handRootBoneObj;
+        public GameObject handRootBoneObj;
         [SerializeField]
         private GameObject thumbFingerBone0Obj;
         [SerializeField]
@@ -101,6 +102,7 @@ namespace HandTracking.TrackHand
         "pinky0","pinky1","pinky2","pinky3"};
         public static int record_num = 0;
         #endregion
+        CreateInputFile createInputFile;
         // Start is called before the first frame update
         void Awake()
         {
@@ -349,7 +351,7 @@ namespace HandTracking.TrackHand
             // log second after second
             Debug.Log("[Right Hand] Counting before Screenshot 5 seconds: ");
         }
-        void writeToFile()
+        public void writeToFile()
         {
             record_num++;
             GameObject[] fingers = {thumbFingerBone0Obj, thumbFingerBone1Obj, thumbFingerBone2Obj, thumbFingerBone3Obj,
@@ -362,6 +364,7 @@ namespace HandTracking.TrackHand
                 var line = string.Format("{0},", record_num);
                 w.Write(line);
                 var root_transform = handRootBoneObj.transform.position;
+
                 for (int i = 0; i < fingers.Length; i++)
                 {
                     var t = fingers[i].transform.position;
@@ -371,12 +374,12 @@ namespace HandTracking.TrackHand
                 }
                 var line1 = string.Format("{0},{1},{2},", 0, 0, 0);
                 w.Write(line1);
-                var r1 = handRootBoneObj.transform.rotation;
+                var r1 = handRootBoneObj.transform.rotation.eulerAngles;
                 line1 = String.Format("{0},{1},{2},", r1.x, r1.y, r1.z);
                 w.Write(line1);
                 for (int i = 0; i < fingers.Length; i++)
                 {
-                    var t = fingers[i].transform.rotation;
+                    var t = fingers[i].transform.rotation.eulerAngles;
                     line = string.Format("{0},{1},{2},", t.x,
                         t.y, t.z);
                     w.Write(line);

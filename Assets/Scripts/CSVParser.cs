@@ -62,7 +62,7 @@ namespace HandTracking.Parser
             {
                 if (i % 3 == 0)
                 {
-                    Debug.Log(values[i]);
+                    //Debug.Log(values[i]);
                     x = float.Parse(values[i]);
                 }
                 else if (i % 3 == 1)
@@ -165,6 +165,16 @@ namespace HandTracking.Parser
                 }
             }
             return allFingerLines;
+        }
+
+        public static void writeCSV(string csvpath, float[] values)
+        {
+            using(var w = new StreamWriter(csvpath, true))
+            {
+                for (int i = 0; i < values.Length; i++)
+                    w.Write(String.Format("{0},", values[i]));
+                w.WriteLine();
+            }
         }
     }
 }

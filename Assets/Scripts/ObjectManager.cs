@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using HandTracking.Parser;
+using HandTracking.TrackHand;
 using System.IO;
+using RoboticHand;
 /**
  * This class should implement swapping and tracking the game objects that we want the user
  * to interact with
@@ -13,105 +15,57 @@ public class ObjectManager : MonoBehaviour
 {
 
     #region ObjectsToTrack
-    public enum ObjectsToTrack
-    {
-        Cup,
-        Cone,
-        Cylinder,
-        Cube,
-        Ball,
-        Coin,
-        Arc,
-        Pot,
-        Lid
-    }
     [SerializeField]
-    private GameObject Cup;
-    public Quaternion RotationCup;
-    public Vector3 ScaleCup;
+    private TrackHandRight trackHandRight;
     [SerializeField]
-    private GameObject Cone;
-    public Quaternion RotationCone;
-    public Vector3 ScaleCone;
-    [SerializeField]
-    private GameObject Cylinder;
-    public Quaternion RotationCylinder;
-    public Vector3 ScaleCylinder;
-    [SerializeField]
-    private GameObject Cube;
-    public Quaternion RotationCube;
-    public Vector3 ScaleCube;
-    [SerializeField]
-    private GameObject Ball;
-    public Quaternion RotationBall;
-    public Vector3 ScaleBall;
-    [SerializeField]
-    private GameObject Coin;
-    public Quaternion RotationCoin;
-    public Vector3 ScaleCoin;
-    [SerializeField]
-    private GameObject Arc;
-    public Quaternion RotationArc;
-    public Vector3 ScaleArc;
-    [SerializeField]
-    private GameObject Pot;
-    public Quaternion RotationPot;
-    public Vector3 ScalePot;
-    [SerializeField]
-    private GameObject Lid;
-    public Quaternion RotationLid;
-    public Vector3 ScaleLid;
+    private CreateInputFile createInputFile;
+    bool done_recording = true;
+
 
     #endregion
-    public Vector3 Position = new Vector3((float)0.089, (float)0.751, (float)0.59);
-    
-    public Vector3 Scale = new Vector3((float)0.05266825, (float)0.04649679, (float)0.03134177);
+    public Vector3 Position = new Vector3((float)0.089, (float)0.35, (float)0.59);
+    // Vector3(0.0526682511,0.0464967899,0.0313417688)
+    private Vector3 Scale = new Vector3((float)0.0526682511 * 4, (float)0.0464967899 * 4, (float)0.0313417688 * 4);
     public double ScaleRange = 0.01;
-    public int RotateDegreeRange = 30;
+    public int RotateDegreeRange = 360; // was 30
     // these are the shapes we intend to display to the user
-    private GameObject[] objects_to_track;
+    private List<GameObject> objects_to_track;
     // original scales
-    private Vector3[] original_objects_scales;
+    private List<Vector3> original_objects_scales;
     // original angles
-    private Quaternion[] original_objects_angles;
+    private List<Quaternion> original_objects_angles;
     // this is the current shape
     private GameObject current_object;
     private int index;
     private System.Random random_rotate;
     private System.Random random_scale;
     private int record_num = 0;
-    
 
     // Start is called before the first frame update
     void Awake()
     {
-        random_rotate = new System.Random(7);
-        random_scale = new System.Random(29);
-        
+        // init seed
+        random_rotate = new System.Random();
+        random_scale = new System.Random();
+
         // initialize objects_to_track
-        GameObject cup = Instantiate(Cup, Position, RotationCup);
-        GameObject cone = Instantiate(Cone, Position, RotationCone);
-        GameObject cylinder = Instantiate(Cylinder, Position, RotationCylinder);
-        GameObject cube = Instantiate(Cube, Position, RotationCube);
-        GameObject ball = Instantiate(Ball, Position, RotationBall);
-        GameObject coin = Instantiate(Coin, Position, RotationCoin);
-        GameObject arc = Instantiate(Arc, Position, RotationArc);
-        GameObject pot = Instantiate(Pot, Position, RotationPot);
-        GameObject lid = Instantiate(Lid, Position, RotationLid);
-        objects_to_track = new GameObject[] { cup, cone, cylinder, cube, ball, coin, arc, pot, lid};
-        original_objects_scales = new Vector3[objects_to_track.Length];
-        original_objects_angles = new Quaternion[objects_to_track.Length];
-        Vector3[] scales = new Vector3[] {ScaleCup, ScaleCone, ScaleCylinder, ScaleCube, ScaleBall, ScaleCoin, ScaleArc,
-        ScalePot, ScaleLid};
-        for (int i = 0; i < objects_to_track.Length; i++)
+
+        objects_to_track = new List<GameObject>();
+        original_objects_angles = new List<Quaternion>();
+        original_objects_scales = new List<Vector3>();
+
+        // get objects from object holder
+        GameObject holder = GameObject.Find("ObjectHolder");
+        holder.transform.gameObject.transform.localScale = Scale;
+
+        foreach (Transform t in holder.transform)
         {
-            Vector3 currentScale = scales[i];
-            if (scales[i].x == 0 && scales[i].y == 0 && scales[i].z == 0) 
-                currentScale = Scale; // set default if user didn't change
-            objects_to_track[i].transform.localScale = currentScale;
-            objects_to_track[i].SetActive(false);
-            original_objects_scales[i] = currentScale;
-            original_objects_angles[i] = objects_to_track[i].transform.rotation;
+            // include objects in the gameobject list
+            t.gameObject.transform.position = Position;
+            objects_to_track.Add(t.gameObject);
+            original_objects_scales.Add(t.localScale);
+            original_objects_angles.Add(t.localRotation);
+            t.gameObject.SetActive(false);
         }
         // initialize first object, and index
         index = -1;
@@ -120,7 +74,7 @@ public class ObjectManager : MonoBehaviour
         string FILE_NAME_R = Path.Combine(Application.persistentDataPath, fnameRight);
         if(File.Exists(FILE_NAME_R))
             record_num = CSVParser.get_record_num(FILE_NAME_R);
-
+        this.LoadNextObject();
     }
     /**
      * Sets the next object in circular order
@@ -128,11 +82,15 @@ public class ObjectManager : MonoBehaviour
      */
     private void SetNextObject()
     {
-        if (index + 1 >= objects_to_track.Length)
+        if (index + 1 >= objects_to_track.Count)
         {
             index = -1;
         }
         current_object = objects_to_track[++index];
+        // change rotation and scale
+        RandomRotationOnClick(); 
+        RandomScaleOnClick();
+        //Debug.Log(current_object.name);
     }
     private void DisplayNextObject()
     {
@@ -151,7 +109,6 @@ public class ObjectManager : MonoBehaviour
         DisableCurrentObject();
         SetNextObject();
         DisplayNextObject();
-        
     }
 
     /**
@@ -159,7 +116,7 @@ public class ObjectManager : MonoBehaviour
      */
     public void RandomScaleOnClick()
     {
-        Debug.Log("[ObjectManager] Random Scale Button was pressed.");
+        // Debug.Log("[ObjectManager] Random Scale Button was pressed.");
         float num_gen_x = (float)(random_scale.NextDouble() * ScaleRange);
         float num_gen_y = (float)(random_scale.NextDouble() * ScaleRange);
         float num_gen_z = (float)(random_scale.NextDouble() * ScaleRange);
@@ -178,7 +135,7 @@ public class ObjectManager : MonoBehaviour
     }
     public void RandomRotationOnClick()
     {
-        Debug.Log("[ObjectManager] Random Rotation Button was pressed.");
+        // Debug.Log("[ObjectManager] Random Rotation Button was pressed.");
         // get floating number for x, y , z
         float num_gen_x = (float)(random_rotate.NextDouble() * RotateDegreeRange);
         float num_gen_y = (float)(random_rotate.NextDouble() * RotateDegreeRange);
@@ -200,7 +157,6 @@ public class ObjectManager : MonoBehaviour
 
     public void TakeScreenshot()
     {
-        record_num++;
         ScreenCapture.CaptureScreenshot($"Input{record_num}.png");
         Debug.Log("[ObjectManager] Took Screenshot");
     }
@@ -228,6 +184,54 @@ public class ObjectManager : MonoBehaviour
         Vector3 newEulerAngles = original_objects_angles[index].eulerAngles + newEulerAnglesTweak;
         objects_to_track[index].transform.rotation = Quaternion.Euler(newEulerAngles);
     }
+    public void RecordButtonPress()
+    {
+        if (current_object != null)
+        {
+            record_num++;
+            write_input_file();
+            write_target_file();
+        }
+        else
+        {
+            Debug.Log("[ObjectManager] Current Object Is Null");
+        }
+        
+    }
 
+    private void write_target_file()
+    {
+        trackHandRight.writeToFile();
+    }
+    private void write_input_file()
+    {
+        Debug.Log("Getting mesh of object: " + current_object.name);
+        createInputFile.write_inputFile(createInputFile.getMeshPoints(current_object),
+            trackHandRight.handRootBoneObj.transform.position,
+            trackHandRight.handRootBoneObj.transform.rotation.eulerAngles,
+            record_num)
+            ;
+    }
+    public void onTouch()
+    {
+        //if(current_object.activeSelf)
+        if(done_recording)
+        {
+            done_recording = false;
+            TakeScreenshot();
+            StartCoroutine(onTouchRoutine());
+        }
+            
 
+    }
+    public IEnumerator onTouchRoutine()
+    {
+        RecordButtonPress();
+        //yield on a new YieldInstruction that waits for i seconds.
+        yield return new WaitForSeconds(2);
+
+        //After we have waited i seconds print the time again.
+        LoadNextObject();
+        done_recording =true;
+    }
 }
