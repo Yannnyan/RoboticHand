@@ -16,7 +16,7 @@ namespace RoboticHand
             max_index = 100000;
             //F_To_write = @"C:\Users\Yan\Object_creation\input_mesh_wrist.csv";
             F_To_write = Path.Combine(Application.persistentDataPath, fname);
-            //F_To_write = @"C:\Users\Yan\Desktop\augment_input.csv"; // change me when recording!!!
+            F_To_write = @"C:\Users\Yan\Desktop\augment_input.csv"; // change me when recording!!!
             if (!File.Exists(F_To_write))
                 write_inputFileHeaders(false);
         }

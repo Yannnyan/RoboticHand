@@ -12,7 +12,7 @@ public class Augment : MonoBehaviour
     [SerializeField]
     private CreateInputFile createInputFile;
 
-    private string csvpath = @"C:\Users\Yan\Desktop\augment_input.csv";
+    private string csvpath = @"C:\Users\Yan\Desktop\augment_input.csv"; // write
     int record_num = 0;
 
     void Awake()
@@ -31,7 +31,7 @@ public class Augment : MonoBehaviour
         createInputFile.setPath(csvpath);
         if (!File.Exists(createInputFile.F_To_write))
             createInputFile.write_inputFileHeaders(false);
-        string readPath = @"C:\Users\Yan\Desktop\input_mesh_wrist.csv";
+        string readPath = @"C:\Users\Yan\Desktop\input_mesh_wrist.csv"; // read
         (List<int> record_nums, List<List<Vector3>> wrist_vects ,List<List<Vector3>> meshes) = createInputFile.read_inputFile(readPath);
         Vector3[] vecarr = { new Vector3(20, 0, 0), new Vector3(0, 20, 0), new Vector3(0, 0, 20) };
         for (int i = 0; i < meshes.Count; i++)
