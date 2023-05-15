@@ -43,35 +43,24 @@ public class WirteTheObject : MonoBehaviour
         }
     }*/
 
-    public string[] GetInputObject()
+    public string GetInputObject()
     {
-        Vector3 wrist_position = transform.position;
-        Quaternion wrist_rotation = transform.rotation;
         List<Vector3> mesh_points = GetMeshPoints();
 
-        string[] data = new string[3 + 3 + (3*max_index)];
-        int i = 0;
-        data[i++] = wrist_position.x.ToString();
-        data[i++] = wrist_position.y.ToString();
-        data[i++] = wrist_position.z.ToString();
-
-        data[i++] = wrist_rotation.x.ToString();
-        data[i++] = wrist_rotation.y.ToString();
-        data[i++] = wrist_rotation.z.ToString();
-
+        string data = "[";
         int j = 0; for (; j < mesh_points.Count; j++)
         {
-            data[i++] = mesh_points[j].x.ToString();
-            data[i++] = mesh_points[j].y.ToString();
-            data[i++] = mesh_points[j].z.ToString();
+            if(j == 0)
+                data += mesh_points[j].x.ToString();
+            else
+                data += "," +mesh_points[j].x.ToString();
+            data += "," + mesh_points[j].y.ToString();
+            data += "," +mesh_points[j].z.ToString();
+            
 
         }
-        for (; j < max_index; j++)
-        {
-            data[i++] = "null";
-            data[i++] = "null";
-            data[i++] = "null";
-        }
+        data += "]";
+        Debug.Log(j);
         return data;
     }
 
