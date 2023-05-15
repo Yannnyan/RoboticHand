@@ -16,7 +16,7 @@ namespace Loader
         //}
         List<string> joints = "thumb0_X, thumb0_Y, thumb0_Z, thumb1_X, thumb1_Y, thumb1_Z, thumb2_X, thumb2_Y, thumb2_Z, thumb3_X, thumb3_Y, thumb3_Z, index1_X, index1_Y, index1_Z, index2_X, index2_Y, index2_Z, index3_X, index3_Y, index3_Z, middle1_X, middle1_Y, middle1_Z, middle2_X, middle2_Y, middle2_Z, middle3_X, middle3_Y, middle3_Z, ring1_X, ring1_Y, ring1_Z, ring2_X, ring2_Y, ring2_Z, ring3_X, ring3_Y, ring3_Z, pinky0_X, pinky0_Y, pinky0_Z, pinky1_X, pinky1_Y, pinky1_Z, pinky2_X, pinky2_Y, pinky2_Z, pinky3_X, pinky3_Y, pinky3_Z, wrist1_X, wrist1_Y, wrist1_Z".Split(", ").ToList<string>();
         float[] outputs;
-        float[] rotations;
+        public float[] rotations;
         float[] positions;
         public void load_array(float[] outputs_array)
         {
@@ -36,7 +36,7 @@ namespace Loader
                 }
             }
         }
-
+        
         /**get retations
          * 
          */
@@ -46,14 +46,14 @@ namespace Loader
 
             for(int i=0; i< joints.Count; i+=3)
             {
+                // bone name such as index or middle
                 string substr = joints[i].Substring(0, joints[i].Length-3);
                 List<Vector3> vects;
                 Vector3 vec = new Vector3();
                 if(joint_vectors.TryGetValue(substr, out vects))
                 {
-                    vec.x = rotations[i];
-                    vec.y = rotations[i+1];
-                    vec.z = rotations[i+2];
+                   
+                    vec = new Vector3(rotations[i], rotations[i + 1], rotations[i + 2]);
                     vects.Add(vec);
                 }
                 else

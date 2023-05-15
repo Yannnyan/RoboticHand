@@ -73,7 +73,13 @@ namespace Orientation
             return new_name.ToString();
 
         }
-
+        public void LoadAndTransform(float[] rotations)
+        {
+            Loader.HandLoader handLoader = new HandLoader();
+            handLoader.rotations = rotations;
+            this.joint_to_orientation = handLoader.get_hand_joints_rotations_vectors();
+            transform_hand_model();
+        }
         private void transform_hand_model()
         {
             string root_path = "/Hands/RightHand/RightHandVisual/OculusHand_R";
@@ -87,7 +93,7 @@ namespace Orientation
                 for (int j = 0; j < l_amount; j++)
                 {
                     string name = prefix + names[i];
-                    Debug.Log(root_path + walk_backwards(name, j));
+                    //Debug.Log(root_path + walk_backwards(name, j));
                     GameObject game = GameObject.Find(root_path + walk_backwards(name, j));
                     game.transform.rotation = Quaternion.Euler(this.joint_to_orientation[names[i]][j]);
                 }
