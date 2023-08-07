@@ -8,6 +8,8 @@ namespace OfflineValidation{
         public LineRenderer lineRenderer;
         private GameObject[] point_cloud;
         public GameObject cloud;
+        public float sphere_size = 0.01f;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -53,7 +55,7 @@ namespace OfflineValidation{
                 GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
                 //Debug.Log(conv);
                 sphere.transform.position = convex[i];
-                sphere.transform.localScale = Vector3.one * 0.01f;
+                sphere.transform.localScale = Vector3.one * sphere_size;
                 point_cloud[i] = sphere;
                 sphere.transform.parent = cloud.transform;
             }

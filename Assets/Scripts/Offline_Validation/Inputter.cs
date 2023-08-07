@@ -16,25 +16,29 @@ namespace OfflineValidation
         public string prediction_path;
         public string stats_path;
         public string convex_path;
+        public string voxels_dir_path;
         public Orientation.Orientation orientation_preds;
         public Orientation.Orientation orientation_actuals;
         public ConvexDrawer convexhullDrawer;
+        public VoxelsDrawer voxelsDrawer;
         public TextChanger textChanger;
+        public bool isVoxels = false;
 
         // hand pos
         private Vector3 handPredPos;
         private Vector3 handActualPos;
-        // rotations and convex
+        // rotations and convex and voxels
         private Dictionary<int, float[]> row_to_rotations_actuals;
         private Dictionary<int, float[]> row_to_rotations_preds;
         private Dictionary<int, Vector3[]> row_to_convex;
+        private string[] voxels_files_inorder;
         // scores
         private float[][] mse_r2_scores;
 
         // index of current row
         private int ind = 0;
-       
-       
+
+
 
         // Start is called before the first frame update
         void Start()
@@ -47,13 +51,21 @@ namespace OfflineValidation
             row_to_convex = new Dictionary<int, Vector3[]>();
             handPredPos = orientation_preds.GetHand(preds_hand_name)["wrist"][0].transform.position;
             handActualPos = orientation_actuals.GetHand(actuals_hand_name)["wrist"][0].transform.position;
-            
+
             // get predictions and actuals
             row_to_rotations_actuals = readAllPredictions(actual_path);
             row_to_rotations_preds = readAllPredictions(prediction_path);
-            
-            // read Convext
-            readAllConvexWrist(convex_path);
+
+
+            if (!isVoxels) {
+                // read Convext
+                readAllConvexWrist(convex_path);
+            }
+
+            else
+            {
+                readVoxelsFilesInOrder(voxels_dir_path);
+            }
 
             // read mse/r2 scores
             mse_r2_scores = readAllScores(stats_path);
@@ -79,9 +91,16 @@ namespace OfflineValidation
 
                 orientation_actuals.LoadAndTransformSecondary(cur_row_actuals);
 
-                //convexhullDrawer.renderLineConvex(row_to_convex[ind]);
+                if(!isVoxels)
+                {
+                    //convexhullDrawer.renderLineConvex(row_to_convex[ind]);
 
-                convexhullDrawer.renderCircleConvex(row_to_convex[ind], handPredPos);
+                    convexhullDrawer.renderCircleConvex(row_to_convex[ind], handPredPos);
+                }
+                else
+                {
+                    voxelsDrawer.drawVoxels(voxels_files_inorder[ind]);
+                }
 
                 textChanger.setMSE("" + mse_r2_scores[0][ind]);
 
@@ -92,6 +111,39 @@ namespace OfflineValidation
         }
 
 
+        private class stringComp : IComparer
+        {
+            public int Compare(object x, object y)
+            {
+                string x_st = (string)x;
+
+                string y_st = (string)y;
+
+                string[] x_splat = x_st.Split("_"), 
+                    y_splat = y_st.Split("_");
+
+                float x1 = float.Parse(x_splat[x_splat.Length - 1]);
+
+                float y1 = float.Parse(y_splat[y_splat.Length - 1]);
+
+                if (x1 < y1) return -1;
+
+                else if (x1 > y1) return 1;
+
+                else return 0;
+            }
+        }
+
+        private void readVoxelsFilesInOrder(string voxelsDirPath)
+        {
+            string[] files = Directory.GetFiles(voxelsDirPath);
+            
+            Array.Sort(files, new stringComp());
+
+            //foreach (string file in files) Debug.Log(file);
+
+            voxels_files_inorder = files;
+        }
 
         private void readAllConvexWrist(string path)
         {
