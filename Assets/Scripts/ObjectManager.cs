@@ -36,10 +36,11 @@ public class ObjectManager : MonoBehaviour
     private List<Quaternion> original_objects_angles;
     // this is the current shape
     private GameObject current_object;
-    private int index;
+    private int index = -1;
     private System.Random random_rotate;
     private System.Random random_scale;
     private int record_num = 0;
+    public float period = 0.1f;
 
     // Start is called before the first frame update
     void Awake()
@@ -68,13 +69,23 @@ public class ObjectManager : MonoBehaviour
             t.gameObject.SetActive(false);
         }
         // initialize first object, and index
-        index = -1;
         current_object = objects_to_track[0];
         string fnameRight = "PositionBonesRight" + ".csv";
         string FILE_NAME_R = Path.Combine(Application.persistentDataPath, fnameRight);
         if(File.Exists(FILE_NAME_R))
             record_num = CSVParser.get_record_num(FILE_NAME_R);
         this.LoadNextObject();
+    }
+
+    void Update()
+    {
+        // trackHandRight.printHand();
+        //if (Time.time > nextActionTime)
+        //{
+        //    nextActionTime += period;
+        //    // execute block of code here
+        //    trackHandRight.printHand();
+        //}
     }
     /**
      * Sets the next object in circular order

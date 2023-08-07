@@ -3,7 +3,30 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - wrist
+  - index1
+  - index2
+  - index3
+  - index_tip
+  - middle1
+  - middle2
+  - middle3
+  - middle_tip
+  - pinky1
+  - pinky2
+  - pinky3
+  - pinky0
+  - pinky_tip
+  - ring1
+  - ring2
+  - ring3
+  - ring_tip
+  - thumb0
+  - thumb1
+  - thumb2
+  - thumb3
+  - thumb_tip
   layers:
   - Default
   - TransparentFX

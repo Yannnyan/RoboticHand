@@ -1,5 +1,6 @@
 using Unity.Barracuda;
 using UnityEngine;
+using Genetic;
 
 
 public class ConvextModel : MonoBehaviour
@@ -8,6 +9,8 @@ public class ConvextModel : MonoBehaviour
     private NNModel model;
     [SerializeField]
     private Model runtimeModel;
+    [SerializeField]
+    Orientation.Orientation orientation;
     private string outputLayerName;
     private IWorker worker;
 
@@ -17,40 +20,47 @@ public class ConvextModel : MonoBehaviour
     {
         runtimeModel = ModelLoader.Load(model);
         worker = WorkerFactory.CreateWorker(WorkerFactory.Type.CSharpBurst,runtimeModel);
+        Debug.Log(string.Format("OutputLayer Shape: {0}", runtimeModel.outputs.Count));
+        for (int i = 0; i < runtimeModel.layers.Count; i++)
+            Debug.Log(runtimeModel.layers[i].name);
         outputLayerName = runtimeModel.outputs[runtimeModel.outputs.Count - 1];
+        Debug.Log("Last Layer name: " + runtimeModel.outputs[runtimeModel.outputs.Count - 1]);
+        
     }
 
     public void Predict(float[] inputs)
     {
+        // debug
+        for (int i = 0; i < runtimeModel.layers.Count; i++)
+            Debug.Log(runtimeModel.layers[i].name);
+
+        outputLayerName = runtimeModel.outputs[runtimeModel.outputs.Count - 1];
+
         int[] inputShape = new int[] {1,6006};
-        /*
-        float[] randoms = new float[inputShape[1]];
-        //Debug.Log(inputShape[0] + ", " + inputShape[1]);
-        for(int i =0; i< inputShape[1]; i++)
-        {
-            float rand = Random.Range(0f, 1f);
-            randoms[i] = rand;
-        }
-        */
+
         Tensor inputTensor = new Tensor(inputShape[0], inputShape[1]);
+
         inputTensor.data.Upload(inputs, new TensorShape(inputShape[0], inputShape[1]));
-        worker.Execute(inputTensor);
-        Tensor outputTensor = worker.PeekOutput(outputLayerName);
-        float[] outputData = outputTensor.ToReadOnlyArray(); // Retrieve the data from outputTensor
-        float[] zeros = new float[outputData.Length];
-        for (int i = 0; i < outputData.Length; i++)
-        {
-            outputData[i] *= 360; // Multiply each element by 360
-            zeros[i] = 0;
-        }
-        Debug.Log(outputData);
-        Orientation.Orientation orientation = new Orientation.Orientation();
-        // init to 0
-        orientation.LoadAndTransform(zeros);
-        // transform
-        orientation.LoadAndTransform(outputData);
-        inputTensor.Dispose(); // handle memory leaks
+
+        Tensor outputTensor = worker.ExecuteAndWaitForCompletion(inputTensor);
+        // Retrieve the data from outputTensor
+        float[] outputData = outputTensor.ToReadOnlyArray(); 
+        // handle memory leaks
+        inputTensor.Dispose(); 
+
         outputTensor.Dispose();
+
+        Debug.Log(string.Format("Output shape: {0},", outputData.Length));
+        
+        outputData = Genetic.Manager.normalize_output(outputData);
+        
+       
+        Debug.Log(string.Format("[{0}]", string.Join(", ", outputData)));
+        
+        // init to 0
+        // transform
+        orientation.LoadAndTransformSecondary(outputData);
+        
         //Debug.Log(outputTensor.DataToString());
     }
 

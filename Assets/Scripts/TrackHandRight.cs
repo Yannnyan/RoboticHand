@@ -93,6 +93,7 @@ namespace HandTracking.TrackHand
         private string FILE_NAME_L;
         private string FILE_NAME_R;
         private string F_To_write;
+        private string rotations_file = "rotations.csv";
         #endregion
         #region static_names
         public static string[] finger_names = {"thumb0", "thumb1", "thumb2", "thumb3",
@@ -108,6 +109,7 @@ namespace HandTracking.TrackHand
         {
             FILE_NAME_L = Path.Combine(Application.persistentDataPath, fnameLeft);
             FILE_NAME_R = Path.Combine(Application.persistentDataPath, fnameRight);
+            rotations_file = Path.Combine(Application.persistentDataPath, rotations_file);
             ovrSkeleton = handRootBoneObj.GetComponent<OVRSkeleton>();
             line = GetComponent<LineRenderer>();
             F_To_write = handToTrack == HandToTrack.Left ? FILE_NAME_L : FILE_NAME_R;
@@ -350,6 +352,39 @@ namespace HandTracking.TrackHand
         {
             // log second after second
             Debug.Log("[Right Hand] Counting before Screenshot 5 seconds: ");
+        }
+        public void printHand()
+        {
+            GameObject[] fingers = {thumbFingerBone0Obj, thumbFingerBone1Obj, thumbFingerBone2Obj, thumbFingerBone3Obj,
+                                        indexFingerBone1Obj, indexFingerBone2Obj, indexFingerBone3Obj,
+                                        middleFingerBone1Obj, middleFingerBone2Obj, middleFingerBone3Obj,
+                                        ringFingerBone1Obj, ringFingerBone2Obj, ringFingerBone3Obj,
+                                        pinkyFingerBone0Obj, pinkyFingerBone1Obj,pinkyFingerBone2Obj, pinkyFingerBone3Obj};
+            string[] finger_names = new string[] {"thumbFingerBone0Obj", "thumbFingerBone1Obj", "thumbFingerBone2Obj", "thumbFingerBone3Obj",
+                                        "indexFingerBone1Obj", "indexFingerBone2Obj", "indexFingerBone3Obj",
+                                        "middleFingerBone1Obj", "middleFingerBone2Obj", "middleFingerBone3Obj",
+                                        "ringFingerBone1Obj", "ringFingerBone2Obj", "ringFingerBone3Obj",
+                                        "pinkyFingerBone0Obj", "pinkyFingerBone1Obj","pinkyFingerBone2Obj", "pinkyFingerBone3Obj"};
+            var w_r = handRootBoneObj.transform.rotation.eulerAngles;
+            List<Vector3> rotations = new List<Vector3>();
+            rotations.Add(w_r);
+            Debug.Log("[Hand] w-r: " + w_r.x + "," + w_r.y + "," + w_r.z);
+            for (int i = 0; i < fingers.Length; i++)
+            {
+                var r = fingers[i].transform.rotation.eulerAngles;
+                Debug.Log("[Hand] " + finger_names[i] + " : "
+                    + r.x + "," + r.y + "," + r.z);
+                rotations.Add(r);
+            }
+            using (var w = new StreamWriter(rotations_file, true))
+            {
+                foreach(Vector3 rotation in rotations)
+                {
+                    var line = string.Format("{0},{1},{2},",rotation.x,rotation.y,rotation.z);
+                    w.Write(line);
+                }
+                w.WriteLine();
+            }
         }
         public void writeToFile()
         {

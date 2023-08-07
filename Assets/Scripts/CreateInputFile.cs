@@ -16,7 +16,7 @@ namespace RoboticHand
             max_index = 100000;
             //F_To_write = @"C:\Users\Yan\Object_creation\input_mesh_wrist.csv";
             F_To_write = Path.Combine(Application.persistentDataPath, fname);
-            F_To_write = @"C:\Users\Yan\Desktop\augment_input.csv"; // change me when recording!!!
+            // F_To_write = @"C:\Users\Yan\Desktop\augment_input.csv"; // change me when recording!!!
             if (!File.Exists(F_To_write))
                 write_inputFileHeaders(false);
         }
@@ -31,6 +31,7 @@ namespace RoboticHand
             Transform transoform = current_object.transform;
             Mesh mesh = current_object.GetComponent<MeshFilter>().mesh;
             Vector3[] vertices = mesh.vertices;
+            
             List<Vector3> lines_holder = new List<Vector3>();
 
             for (int i = 0; i < vertices.Length; i++)
@@ -93,39 +94,48 @@ namespace RoboticHand
             List<List<Vector3>> mesh_vects= new List<List<Vector3>>();
             List<List<Vector3>> wrist_vects= new List<List<Vector3>>();
             List<int> record_nums = new List<int>();
-            string[] lines = File.ReadAllLines(F_TO_READ);
-            Debug.Log(lines[0]);
-            for(int j=1; j< lines.Length; j++)
+            Debug.Log("Reading File: " + F_TO_READ);
+            using (StreamReader sw = new StreamReader(F_TO_READ))
             {
-                string line = lines[j];
-                //Debug.Log(line);
-                string[] cols = line.Split(",");
-                List<Vector3> v = new List<Vector3>();
-                List<Vector3> vw = new List<Vector3>();
-                // add the record numbers for each line
-                record_nums.Add(int.Parse(cols[0]));
-                // add the wrist vectors
-                for(int i=1; i<7-2; i+=3)
-                {
-                    if (cols[i] == "null" || cols[i] == " ")
-                    {
-                        break;
-                    }
-                    vw.Add(new Vector3(float.Parse(cols[i]), float.Parse(cols[i + 1]), float.Parse(cols[i + 2])));
-                }
-                // add the mesh vectors
-                for(int i=7; i<cols.Length-2; i+=3)
+                bool first = true;
+                while(!sw.EndOfStream)
                 {
                     
-                    if (cols[i] == "null" || cols[i] == " ")
+                    string line = sw.ReadLine();
+                    if (first)
                     {
-                        break;
+                        first = false;
+                        continue;
                     }
-                   
-                    v.Add(new Vector3(float.Parse(cols[i]), float.Parse(cols[i+1]), float.Parse(cols[i+2])));
+                    // Debug.Log(line);
+                    string[] cols = line.Split(",");
+                    List<Vector3> v = new List<Vector3>();
+                    List<Vector3> vw = new List<Vector3>();
+                    // add the record numbers for each line
+                    record_nums.Add(int.Parse(cols[0]));
+                    // add the wrist vectors
+                    for (int i = 1; i < 7 - 2; i += 3)
+                    {
+                        if (cols[i] == "null" || cols[i] == " " || cols[i] == "")
+                        {
+                            break;
+                        }
+                        vw.Add(new Vector3(float.Parse(cols[i]), float.Parse(cols[i + 1]), float.Parse(cols[i + 2])));
+                    }
+                    // add the mesh vectors
+                    for (int i = 7; i < cols.Length - 2; i += 3)
+                    {
+
+                        if (cols[i] == "null" || cols[i] == " " || cols[i] == "")
+                        {
+                            break;
+                        }
+
+                        v.Add(new Vector3(float.Parse(cols[i]), float.Parse(cols[i + 1]), float.Parse(cols[i + 2])));
+                    }
+                    mesh_vects.Add(v);
+                    wrist_vects.Add(vw);
                 }
-                mesh_vects.Add(v);
-                wrist_vects.Add(vw);
             }
             return (record_nums, wrist_vects ,mesh_vects);
         }
