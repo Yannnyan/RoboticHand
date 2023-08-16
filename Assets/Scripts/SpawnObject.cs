@@ -5,7 +5,7 @@ using UnityEngine;
 using Orientation;
 using Genetic;
 
-public class SpwanObjects : MonoBehaviour
+public class SpawnObject : MonoBehaviour
 {
     [SerializeField] GameObject[] objects;
     [SerializeField] KeyCode key;
@@ -43,13 +43,13 @@ public class SpwanObjects : MonoBehaviour
             
             lastObject = spawnObject(objects[index]);
             
-            var inputData = lastObject.GetComponent<WirteTheObject>().GetInputObject();
+            var inputData = lastObject.GetComponent<WriteTheObject>().GetInputObject();
 
             GameObject wrist = orientation.GetHandByTag()["wrist"][0];
 
             Client.onServerMessage onmsg = new Client.onServerMessage(updateRotations);
 
-            client.SedMesh(
+            client.SendMesh(
                 inputData,
                 new Vector3[] {new Vector3(0,0,0), new Vector3(0,0,0)}, // wrist.transform.position, wrist.transform.rotation.eulerAngles
                 onmsg);

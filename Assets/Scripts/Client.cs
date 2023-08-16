@@ -7,12 +7,21 @@ using Newtonsoft.Json;
 
 public class Client : MonoBehaviour
 {
-    [SerializeField] public string URL = "http://localhost:8000/";
+    [SerializeField] 
+    public string URL = "http://localhost:8000/";
     [SerializeField]
     ConvextModel model;
+    [SerializeField]
+    bool isconvexModel;
 
     private void Start()
     {
+        if (isconvexModel)
+            URL += "convexmodel";
+        else
+        {
+            URL += "voxelmodel";
+        }
         //SedMesh();
     }
 
@@ -91,7 +100,7 @@ public class Client : MonoBehaviour
 
     public delegate void onServerMessage(float[] rotations);
 
-    public void SedMesh(string meshMessege, Vector3[] handPosRot, onServerMessage onmsg)
+    public void SendMesh(string meshMessege, Vector3[] handPosRot, onServerMessage onmsg)
     {
         StartCoroutine(SendDataToServer(meshMessege, handPosRot, onmsg));
     }

@@ -4,7 +4,7 @@ using System.IO;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter))]
-public class WirteTheObject : MonoBehaviour
+public class WriteTheObject : MonoBehaviour
 {
     [SerializeField] int max_index = 100000;
 
@@ -24,25 +24,7 @@ public class WirteTheObject : MonoBehaviour
         return lines_holder;
     }
 
-    /*public void write_inputFileHeaders(bool append)
-    {
-
-        using (var w = new StreamWriter(F_To_write, append))
-        {
-            w.Write(string.Format("{0},", "Output"));
-            var line = string.Format("{0},{1},{2},", "w_p_x", "w_p_y", "w_p_z");
-            w.Write(line);
-            line = string.Format("{0},{1},{2},", "w_r_x", "w_r_y", "w_r_z");
-            w.Write(line);
-            for (int i = 0; i < max_index; i++)
-            {
-                line = string.Format("{0},{1},{2},", $"point{i}_x", $"point{i}_y", $"point{i}_z");
-                w.Write(line);
-            }
-            w.WriteLine();
-        }
-    }*/
-
+    
     public string GetInputObject()
     {
         List<Vector3> mesh_points = GetMeshPoints();
@@ -63,6 +45,24 @@ public class WirteTheObject : MonoBehaviour
         Debug.Log(j);
         return data;
     }
+    /*public void write_inputFileHeaders(bool append)
+    {
+
+        using (var w = new StreamWriter(F_To_write, append))
+        {
+            w.Write(string.Format("{0},", "Output"));
+            var line = string.Format("{0},{1},{2},", "w_p_x", "w_p_y", "w_p_z");
+            w.Write(line);
+            line = string.Format("{0},{1},{2},", "w_r_x", "w_r_y", "w_r_z");
+            w.Write(line);
+            for (int i = 0; i < max_index; i++)
+            {
+                line = string.Format("{0},{1},{2},", $"point{i}_x", $"point{i}_y", $"point{i}_z");
+                w.Write(line);
+            }
+            w.WriteLine();
+        }
+    }*/
 
     /*public (List<int>,List<List<Vector3>>,List<List<Vector3>>) read_inputFile(string F_TO_READ)
     {
