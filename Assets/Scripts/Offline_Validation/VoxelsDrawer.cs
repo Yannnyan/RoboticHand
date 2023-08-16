@@ -40,7 +40,7 @@ namespace OfflineValidation
 
                 if (line == "")
                     continue;
-
+                
                 string[] indices_str = line.Split(" ");
 
                 Debug.Log(line);

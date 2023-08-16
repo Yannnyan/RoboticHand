@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: ed1387202b1349540a5d6464f0f27488, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028331, g: 0.2257133, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.013931583, g: 0.072342254, b: 0.10002664, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1704,14 +1704,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 513687426}
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 4.57, y: 3, z: -3.14}
+  m_LocalRotation: {x: -0.0017298828, y: -0.99816483, z: -0.034926385, w: 0.0494385}
+  m_LocalPosition: {x: -4.9247346, y: -0.41241932, z: 6.8422756}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: -4.008, y: -174.329, z: 0}
 --- !u!1 &534228244
 GameObject:
   m_ObjectHideFlags: 0
@@ -3005,7 +3005,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 938319077}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -16.83, y: -1.18, z: 1.67}
+  m_LocalPosition: {x: -18.26, y: -1.18, z: 1.67}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4040,14 +4040,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1152887895}
-  m_LocalRotation: {x: -0, y: -0.99996054, z: -0, w: 0.00888488}
-  m_LocalPosition: {x: -4.95, y: 0.58, z: 5.8}
+  m_LocalRotation: {x: -0.0017298828, y: -0.99816483, z: -0.034926385, w: 0.0494385}
+  m_LocalPosition: {x: -4.9593573, y: -0.03333181, z: 6.8726115}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: -178.982, z: 0}
+  m_LocalEulerAnglesHint: {x: -4.008, y: -174.329, z: 0}
 --- !u!1 &1186899759
 GameObject:
   m_ObjectHideFlags: 0
@@ -5819,11 +5819,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36c10dde7c578cb43b0dc685797fb91f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actual_path: C:\Users\Yan\Desktop\Robotic hand\data_logs\5.8.2023\model2\actuals.csv
-  prediction_path: C:\Users\Yan\Desktop\Robotic hand\data_logs\5.8.2023\model2\predictions.csv
-  stats_path: C:\Users\Yan\Desktop\Robotic hand\data_logs\26.7.23\train_stats.csv
-  convex_path: C:\Users\Yan\Desktop\Robotic hand\data_logs\25.7.23\mesh_wrist.csv
-  voxels_dir_path: C:\Users\Yan\Desktop\Robotic hand\Scripts\Voxelization\cubes
+  actual_path: C:\Users\dvir_\Downloads\16.8.2023\v2\actuals.csv
+  prediction_path: C:\Users\dvir_\Downloads\16.8.2023\v2\predictions.csv
+  stats_path: C:\Users\dvir_\Downloads\16.8.2023\v2\stats.csv
+  convex_path: C:\Users\dvir_\Downloads\mesh_wrist.csv
+  voxels_dir_path: C:\Users\dvir_\Downloads\16.8.2023\v2\voxels
   orientation_preds: {fileID: 1315261853}
   orientation_actuals: {fileID: 757008414}
   convexhullDrawer: {fileID: 814234513}
@@ -6018,10 +6018,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.55
-  m_fontSizeBase: 36
+  m_fontSize: 0.5
+  m_fontSizeBase: 0.5
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 0
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -13280,10 +13280,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.25
-  m_fontSizeBase: 36
+  m_fontSize: 0.5
+  m_fontSizeBase: 0.5
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 0
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -13316,7 +13316,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0.19118187, y: 0, z: -0.12669483, w: 0}
+  m_margin: {x: 0.15272696, y: 0, z: -0.21286364, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   _SortingLayer: 0
