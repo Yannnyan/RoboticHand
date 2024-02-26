@@ -23,12 +23,17 @@ namespace Orientation
         HandLoader loader;
 
         // Start is called before the first frame update
-        void Start()
+        void Awake()
         {
-            if(hand_name != "-")
+            if(!hand_name.Equals("-"))
+            {
                 hand_dict = GetHand(hand_name);
+            }
             else
+            {
                 hand_dict = GetHand();
+
+            }
         }
 
         private int loop_amount(string name)
@@ -76,7 +81,10 @@ namespace Orientation
         }
         private void transform_hand_model()
         {
-            string root_path = "/Hands/RightHand/RightHandVisual/OculusHand_R";
+            
+            string root_path = this.hand_name.Equals("-") ? "/Hands/RightHand/RightHandVisual/OculusHand_R" : "/" + this.hand_name + "/RightHand/RightHandVisual/OculusHand_R";
+            if (!this.hand_name.Equals("-"))
+                Debug.Log(root_path);
             string[] names = { "wrist", "thumb", "index", "middle", "ring", "pinky" };
             string prefix = "b_r_";
             //GameObject wrist = GameObject.Find("/Hands/RightHand/RightHandVisual/OculusHand_R/");
@@ -98,6 +106,8 @@ namespace Orientation
         }
         public void LoadAndTransformSecondary(float[] rotations)
         {
+            // hand_dict = GetHand(hand_name);
+
             Loader.HandLoader handLoader = new HandLoader();
             handLoader.rotations = rotations;
             this.joint_to_orientation = handLoader.get_hand_joints_rotations_vectors();
@@ -112,7 +122,6 @@ namespace Orientation
                     try
                     {
                         hand_dict[name][i].transform.rotation = Quaternion.Euler(this.joint_to_orientation[name][i]);
-
                     }
                     catch (Exception e)
                     {
@@ -134,7 +143,7 @@ namespace Orientation
 
         public float[] record_hand()
         {
-            string root_path = "/Hands/RightHand/RightHandVisual/OculusHand_R";
+            string root_path = this.hand_name.Equals("-") ? "/Hands/RightHand/RightHandVisual/OculusHand_R" : "/" + this.hand_name + "/RightHand/RightHandVisual/OculusHand_R";
             string[] names = { "wrist", "thumb", "index", "middle", "ring", "pinky" };
             string prefix = "b_r_";
             //GameObject wrist = GameObject.Find("/Hands/RightHand/RightHandVisual/OculusHand_R/");

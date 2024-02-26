@@ -40,13 +40,25 @@ namespace Genetic
                 reactMessage(message);
             }
         }
-        public static float[] normalize_output_360(float[] outputData)
+
+        public static float[] correct_rotations_around_180(float[] outputData)
         {
+            float[] output = new float[outputData.Length];
             for (int i = 0; i < outputData.Length; i++)
             {
-                outputData[i] *= 360;
+                output[i] = outputData[i] > 180 ? 360 - outputData[i] : outputData[i];
             }
-            return outputData;
+            return output;
+        }
+
+        public static float[] normalize_output_360(float[] outputData)
+        {
+            float[] output = new float[outputData.Length];
+            for (int i = 0; i < outputData.Length; i++)
+            {
+                output[i] = outputData[i] * 360;
+            }
+            return output;
         }
         public static float[] normalize_output(float[] outputData)
         {

@@ -18,7 +18,7 @@ public class ConvextModel : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        runtimeModel = ModelLoader.Load(model);
+        //runtimeModel = ModelLoader.Load(model);
         worker = WorkerFactory.CreateWorker(WorkerFactory.Type.CSharpBurst,runtimeModel);
         Debug.Log(string.Format("OutputLayer Shape: {0}", runtimeModel.outputs.Count));
         for (int i = 0; i < runtimeModel.layers.Count; i++)

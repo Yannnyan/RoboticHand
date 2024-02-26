@@ -12,11 +12,12 @@ public class RotateHand : MonoBehaviour
     private int joint_num = 0;
     private string capturePath = @"C:\Users\Yan\Desktop\Simulator Snaps";
     private int capture_id = 0;
+    private int finger_pressed = 0;
 
     // Start is called before the first frame update
     void Start()
     {
-        rotations = orientation.record_hand();
+        toStop = true;
         StartCoroutine(GetNextInput());
     }
 
@@ -44,17 +45,40 @@ public class RotateHand : MonoBehaviour
     {
         if (!toStop)
         {
-            runNextRotation(2 + joint_num);
-            runNextRotation(5 + joint_num);
-            runNextRotation(8 + joint_num);
-            runNextRotation(11 + joint_num);
-            runNextRotation(15 + joint_num);
+            if (finger_pressed == 0)
+            {
+                for(int i=0; i< 5; i++)
+                {
+                    runNextRotation(2 + joint_num + 3 * i);
+                }
+            }
+            else if(finger_pressed == 1)
+            {
+                runNextRotation(1 + joint_num);
+            }
+            else if(finger_pressed == 2)
+            {
+                runNextRotation(5 + joint_num);
+            }
+            else if (finger_pressed == 3)
+            {
+                runNextRotation(8 + joint_num);
+            }
+            else if (finger_pressed == 4)
+            {
+                runNextRotation(11 + joint_num);
+            }
+            else if (finger_pressed == 5)
+            {
+                runNextRotation(14 + joint_num);
+            }
         }
     }
     void runNextRotation(int iToChange)
     {
         //rotations[iToChange * 3]+=10;
         //rotations[iToChange * 3 + 1] += 10;
+        rotations = orientation.record_hand();
         rotations[iToChange * 3 + 2] += 1;
         orientation.LoadAndTransform(rotations);
     }
@@ -87,38 +111,33 @@ public class RotateHand : MonoBehaviour
 
     private IEnumerator waitForKeyPress()
     {
-        string chars = "1234567890abcdefgh";
+        string chars = "012345";
         while (true) // essentially a "while true", but with a bool to break out naturally
         {
             string input = "";
-            foreach(char c in chars)
-            {
-                if (Input.GetKeyDown("" + c))
-                {
-                    Debug.Log(input);
-                    Debug.Log("hi");
-                    if (c >= 'a' && c <= 'h')
-                        runNextRotation((c - 'a') + 10);
-                    else if (c >= '0' && c <= '9')
-                        runNextRotation(c - '0');
-                    break;
-                }
-                
-            }
             if (Input.GetKeyDown("w"))
             {
                 toStop = !toStop;
             }
-            else if(Input.GetKeyDown("q"))
+            else if (Input.GetKeyDown("q"))
             {
-                joint_num = (joint_num + 1) % 3;
+                joint_num = finger_pressed == 1 || finger_pressed == 5 ? (joint_num + 1) % 4 : (joint_num + 1) % 3;
             }
-            else if(Input.GetKeyDown("p"))
+            else if (Input.GetKeyDown("p"))
             {
                 writeTheArr(rotations);
                 ScreenCapture.CaptureScreenshot(capturePath + "/Capture" + capture_id.ToString() + ".png");
                 capture_id++;
             }
+            foreach (char c in chars)
+            {
+                if (Input.GetKey("" + c))
+                {
+                    finger_pressed = c - '0';
+                    break;
+                }
+            }
+            
             rotateHand();
 
 
